@@ -1,0 +1,15 @@
+/* Roboto */
+@font-face {
+  font-family: 'Roboto';
+  src: url('../fonts/roboto/Roboto.woff2') format('woff2'), url('../fonts/roboto/Roboto.woff') format('woff');
+  font-style: normal;
+  font-weight: medium;
+}
+
+/* RobotoBold */
+@font-face {
+  font-family: 'RobotoBold';
+  src: url('../fonts/roboto/RobotoBold.woff2') format('woff2'), url('../fonts/roboto/RobotoBold.woff') format('woff');
+  font-style: normal;
+  font-weight: bold;
+}

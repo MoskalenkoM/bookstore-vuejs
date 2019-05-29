@@ -1,0 +1,33 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  line-height: var(--line_height_16);
+  height: var(--height_100);
+}
+
+body {
+  min-width: var(--min_width);
+  width: var(--width_100);
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+p,
+li,
+button {
+  -webkit-font-smoothing: auto;
+}
