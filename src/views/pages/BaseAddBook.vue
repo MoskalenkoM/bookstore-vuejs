@@ -1,9 +1,15 @@
 <template lang="pug">
-  p Add book
+  base-form
 </template>
 
 <script>
-export default {};
+import BaseForm from "../../components/BaseForm.vue";
+
+export default {
+  components: {
+    BaseForm
+  }
+};
 </script>
 
 <style lang="postcss" scoped>

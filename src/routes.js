@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import TheHome from './views/TheHome.vue';
 import BaseAllBooks from './views/pages/BaseAllBooks.vue';
 import BaseAddBook from './views/pages/BaseAddBook.vue';
-import BaseEditBook from './views/pages/BaseEditBook.vue';
+// import BaseEditBook from './views/pages/BaseEditBook.vue';
 // страница ошибки
 import Pagenotfound from './views/pages/404.vue';
 
@@ -25,11 +25,11 @@ export default new VueRouter({
         {
           path: 'add-book',
           component: BaseAddBook
-        },
-        {
-          path: 'edit-book',
-          component: BaseEditBook
         }
+        // {
+        //   path: '/edit-book',
+        //   component: BaseEditBook
+        // }
       ]
     },
     {

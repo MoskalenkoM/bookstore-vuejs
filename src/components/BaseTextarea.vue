@@ -1,46 +1,42 @@
 <template lang="pug">
-  ._wrap_input
-    label.label(:for="bind" :class="focused ? 'up' : 'in'") {{ label }}
-    input.input(
+  ._wrap_textarea
+    label.label(
+      :for="bind"
+      :class="[focused ? 'up' : 'in', validError ? 'error_color' : '']"
+    ) {{ label }}
+    textarea.textarea(
+      :class="[validError ? 'error_border' : '', validError ? 'error_color' : '']"
       :id="bind"
       :name="bind"
-      :type="type"
-      :min="number ? min : false"
-      :max="number ? max : false"
-      v-model="value"
-      :required="required"
       @input="input"
       @focus="focus"
       @blur="blur"
+      v-model="value"
+      :maxlength="maxlength + 1"
+      :required="required"
     )
+    .show_count(
+      v-if="maxlength"
+      :class="[focused ? 'up_count' : 'in_count', validError ? 'error_color' : '']"
+    ) {{ value.length }} / {{ maxlength }}
 </template>
 
 <script>
 export default {
   props: {
-    bind: {
-      type: String,
-      required: true
-    },
-    type: {
-      type: String,
-      required: false,
-      default: "text"
-    },
     label: {
       type: String,
       required: false,
       default: ""
     },
-    min: {
+    bind: {
       type: String,
-      required: false,
-      default: ""
+      required: true
     },
-    max: {
-      type: String,
+    maxlength: {
+      type: Number,
       required: false,
-      default: ""
+      default: null
     },
     required: {
       type: Boolean,
@@ -73,38 +69,32 @@ export default {
     }
   },
   computed: {
-    number() {
-      return this.type === "number";
+    validError() {
+      return this.value.length > this.maxlength;
     }
   }
 };
 </script>
 
 <style lang="postcss" scoped>
-._wrap_input {
+._wrap_textarea {
   display: flex;
-  flex-direction: column;
   position: relative;
+  margin: 36px auto 0;
 }
 
-.input {
-  text-indent: 20px;
-  line-height: 30px;
+.textarea {
+  height: 200px;
   width: 100%;
+  font-size: 16px;
+  padding: 10px 10px 5px 20px;
   border-radius: 5px;
   border: 1px solid var(--color_grey_middle);
   color: var(--color_grey_middle);
   background-color: white;
-  font-size: 16px;
   font-family: var(--Roboto);
+  resize: none;
   outline: none;
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  &[type="number"] {
-    appearance: textfield;
-  }
 }
 
 .label {
@@ -112,7 +102,6 @@ export default {
   line-height: 1;
   display: flex;
   align-items: center;
-  /* transition: all 0.1s linear; */
   transition: color 0.1s linear, top 0.1s linear, left 0.1s linear;
   font-size: 16px;
 }
@@ -121,9 +110,8 @@ export default {
 .in {
   font-family: var(--Roboto);
   color: var(--color_grey_middle);
-  top: 0;
+  top: 20px;
   left: 20px;
-  height: 100%;
 }
 
 .up {
@@ -131,5 +119,32 @@ export default {
   color: var(--color_grey_dark);
   top: -25px;
   left: 0;
+}
+
+.show_count {
+  position: absolute;
+  color: var(--color_grey_middle);
+  font-size: 16px;
+  font-family: var(--Roboto);
+  line-height: 1;
+  transition: color 0.1s linear, top 0.1s linear, right 0.1s linear;
+}
+
+.in_count {
+  right: 20px;
+  top: 20px;
+}
+
+.up_count {
+  right: 0;
+  top: -25px;
+}
+
+.error_color {
+  color: var(--color_red);
+}
+
+.error_border {
+  border-color: var(--color_red);
 }
 </style>
