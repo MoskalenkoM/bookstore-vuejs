@@ -1,5 +1,6 @@
 <template lang="pug">
-  .main_view
+  .main_view(:class="isLoading ? 'loading_page' : ''")
+    base-preloader.base_preloader(v-if="isLoading")
     base-header.header
     main.main
       router-view
@@ -7,13 +8,27 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import BaseHeader from "./common/BaseHeader.vue";
 import BaseFooter from "./common/BaseFooter.vue";
+import BasePreloader from "../components/BasePreloader.vue";
 
 export default {
   components: {
     BaseHeader,
-    BaseFooter
+    BaseFooter,
+    BasePreloader
+  },
+  computed: {
+    ...mapGetters("LoadingState", {
+      isLoading: "isLoading"
+    })
+  },
+  beforeMount() {
+    if (this.$route.path === "/") {
+      this.$router.push("all-books");
+    }
   }
 };
 </script>
@@ -24,6 +39,30 @@ export default {
   width: var(--width_100);
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.loading_page {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.base_preloader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color_grey_light);
+  opacity: 0.85;
+  display: flex;
+  justify-content: center;
+  padding: 50px 0 0;
+  font-family: var(--RobotoBold);
+  font-size: 30px;
+  color: var(--color_blue);
+  z-index: 100;
 }
 
 .header {

@@ -14,6 +14,7 @@
       :class="isValidField  || value === '' ? '' : 'error_color error_border'"
       @input="input"
       :required="required"
+      :readonly="readonly ? true : false"
     )
     .show_count(v-if="maxLength")
       span.min_length(
@@ -36,6 +37,11 @@ export default {
       required: false,
       default: "text"
     },
+    outsideValue: {
+      type: String,
+      required: false,
+      default: ""
+    },
     label: {
       type: String,
       required: false,
@@ -57,6 +63,11 @@ export default {
       default: ""
     },
     required: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    readonly: {
       type: Boolean,
       required: false,
       default: false
@@ -87,6 +98,12 @@ export default {
         value: this.value,
         valid: this.isValidField
       });
+    },
+    setValue() {
+      if (!this.outsideValue) {
+        return;
+      }
+      this.value = this.outsideValue;
     }
   },
   computed: {
@@ -121,6 +138,16 @@ export default {
       }
       return this.validMaxLength;
     }
+  },
+  beforeMount() {
+    this.setValue();
+    if (this.value) {
+      this.input({
+        target: {
+          name: this.bind
+        }
+      });
+    }
   }
 };
 </script>
@@ -145,6 +172,9 @@ export default {
   outline: none;
   &::placeholder {
     color: var(--color_grey_middle);
+  }
+  &:read-only {
+    background-color: var(--color_grey_light);
   }
 }
 

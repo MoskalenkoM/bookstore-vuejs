@@ -15,6 +15,7 @@
       :class="invalidMin || invalidMax ? 'error_color error_border' : ''"
       @input="input"
       :required="required"
+      :readonly="readonly ? true : false"
     )
     .show_years(v-if="minYear || maxYear")
       span.min_year(v-if="minYear" :class="invalidMin ? 'error_color' : ''") {{ minYear }}
@@ -28,6 +29,11 @@ export default {
     bind: {
       type: String,
       required: true
+    },
+    outsideValue: {
+      type: String,
+      required: false,
+      default: ""
     },
     label: {
       type: String,
@@ -48,6 +54,11 @@ export default {
       default: "/"
     },
     required: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    readonly: {
       type: Boolean,
       required: false,
       default: false
@@ -76,6 +87,12 @@ export default {
         value: val,
         valid: !this.invalidMin && !this.invalidMax && this.validLength
       });
+    },
+    setValue() {
+      if (!this.outsideValue) {
+        return;
+      }
+      this.value = this.outsideValue;
     }
   },
   computed: {
@@ -87,6 +104,16 @@ export default {
     },
     validLength() {
       return +this.value.length === 4;
+    }
+  },
+  beforeMount() {
+    this.setValue();
+    if (this.value) {
+      this.input({
+        target: {
+          name: this.bind
+        }
+      });
     }
   }
 };
@@ -119,6 +146,9 @@ export default {
   }
   &[type="number"] {
     appearance: textfield;
+  }
+  &:read-only {
+    background-color: var(--color_grey_light);
   }
 }
 

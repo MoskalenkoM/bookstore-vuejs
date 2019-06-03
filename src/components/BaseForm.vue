@@ -1,38 +1,117 @@
 <template lang="pug">
   form._form
     .wrap_btns
-      base-button.add_book(
+      base-button.edit_book(
+        v-if="!editBook"
         :class="getValidForm ? '' : 'disabled'"
-        :content="btnAddBook.content"
+        :content="btn_add_book.content"
         @click="addBook()"
       )
-    base-input.field(v-bind="dataBook.book_title" @input="setFieldBook")
-    base-input.field(v-bind="dataBook.book_cover" @input="setFieldBook")
-    base-textarea.field(v-bind="dataBook.book_description" @input="setFieldBook")
-    base-input.field(v-bind="dataBook.book_author" @input="setFieldBook")
-    base-input.field(v-bind="dataBook.publishing" @input="setFieldBook")
-    base-input.field(v-bind="dataBook.code_isbn" @input="setFieldBook")
-    base-year-input.field(v-bind="dataBook.publication_date" :maxYear="currentYear" @input="setFieldBook")
-    base-number-input.field(v-bind="dataBook.number_pages" @input="setFieldBook")
-    base-rating.field(v-bind="dataBook.rating" @input="setFieldBook")
-    base-textarea.field(v-bind="dataBook.comments" @input="setFieldBook")
-    base-textarea.field(v-bind="dataBook.notes_book" @input="setFieldBook")
+      template(v-if="editBook")
+        base-button.edit(
+          v-if="isEditField"
+          :content="btn_edit_book.content"
+          @click="setEditBook()"
+        )
+        base-button.save(
+          v-if="!isEditField"
+          :content="btn_save_book.content"
+          @click="saveBook()"
+        )
+        base-button.del(
+          :content="btn_del_book.content"
+          @click="delBook()"
+        )
+    base-input.field(
+      v-bind="dataBook.book_title"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.book_title"
+      :readonly="isEditField"
+    )
+    base-input.field(
+      v-bind="dataBook.book_cover"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.book_cover"
+      :readonly="isEditField"
+    )
+    base-textarea.field(
+      v-bind="dataBook.book_description"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.book_description"
+      :readonly="isEditField"
+    )
+    base-input.field(
+      v-bind="dataBook.book_author"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.book_author"
+      :readonly="isEditField"
+    )
+    base-input.field(
+      v-bind="dataBook.publishing"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.publishing"
+      :readonly="isEditField"
+    )
+    base-input.field(
+      v-bind="dataBook.code_isbn"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.code_isbn"
+      :readonly="isEditField"
+    )
+    base-year-input.field(
+      v-bind="dataBook.publication_date"
+      :maxYear="currentYear"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.publication_date"
+      :readonly="isEditField"
+    )
+    base-number-input.field(
+      v-bind="dataBook.count_pages"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.count_pages"
+      :readonly="isEditField"
+    )
+    base-input-rating.field(
+      v-bind="dataBook.rating"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.rating"
+      :readonly="isEditField"
+    )
+    base-textarea.field(
+      v-bind="dataBook.comments"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.comments"
+      :readonly="isEditField"
+    )
+    base-textarea.field(
+      v-bind="dataBook.notes_book"
+      @input="setFieldBook"
+      :outsideValue="checkedBook.notes_book"
+      :readonly="isEditField"
+    )
 </template>
 
 <script>
+import { setTimeout } from "timers";
 import BaseInput from "./BaseInput.vue";
 import BaseNumberInput from "./BaseNumberInput.vue";
 import BaseTextarea from "./BaseTextarea.vue";
-import BaseRating from "./BaseRating.vue";
+import BaseInputRating from "./BaseInputRating.vue";
 import BaseYearInput from "./BaseYearInput.vue";
 import BaseButton from "./BaseButton.vue";
 
 export default {
+  props: {
+    isBook: {
+      type: [Object, Boolean],
+      required: true
+    }
+  },
   components: {
     BaseInput,
     BaseNumberInput,
     BaseTextarea,
-    BaseRating,
+    BaseInputRating,
     BaseYearInput,
     BaseButton
   },
@@ -42,7 +121,7 @@ export default {
         book_title: {
           bind: "book_title",
           label: "Название",
-          maxLength: 10
+          maxLength: 100
         },
         book_cover: {
           bind: "book_cover",
@@ -75,15 +154,15 @@ export default {
           label: "Год издания",
           minYear: "1000"
         },
-        number_pages: {
-          bind: "number_pages",
+        count_pages: {
+          bind: "count_pages",
           label: "Количество страниц",
           minNumb: 1,
           maxNumb: 10000
         },
         rating: {
           name: "rating",
-          countStars: "5",
+          countStars: 5,
           labelRating: "Рейтинг"
         },
         comments: {
@@ -97,17 +176,37 @@ export default {
           maxLength: 100
         }
       },
-      btnAddBook: {
+      btn_add_book: {
         content: "Добавить книгу",
         status: false
       },
-      sendData: {}
+      btn_edit_book: {
+        content: "Редактировать книгу"
+      },
+      btn_save_book: {
+        content: "Сохранить изменения"
+      },
+      btn_del_book: {
+        content: "Удалить книгу"
+      },
+      sendData: {},
+      checkedBook: {},
+      editBook: false,
+      editFields: false
     };
   },
   methods: {
     addBook() {
       // FIXME:
-      console.log(this.sendData);
+      console.log(!!this.sendData);
+      this.$store.commit("LoadingState/setContentLoading", "Adding a book");
+      this.$store.commit("LoadingState/setLoading", true);
+      this.editFields = true;
+      setTimeout(() => {
+        this.$store.commit("LoadingState/setLoading", false);
+        this.$store.commit("LoadingState/setContentLoading", "");
+        this.$router.push("all-books");
+      }, 2000);
     },
     setFieldBook(data) {
       if (data.value && data.valid) {
@@ -116,10 +215,31 @@ export default {
         this.sendData[data.name] = "";
       }
       const keys = Object.keys(this.sendData);
-      this.btnAddBook.status = keys.every(this.validForm);
+      this.btn_add_book.status = keys.every(this.validForm);
     },
     validForm(field) {
       return !!this.sendData[field];
+    },
+    setEditBook() {
+      this.editFields = false;
+    },
+    saveBook() {
+      this.$store.commit("LoadingState/setContentLoading", "Saving a book");
+      this.$store.commit("LoadingState/setLoading", true);
+      this.editFields = true;
+      setTimeout(() => {
+        this.$store.commit("LoadingState/setLoading", false);
+        this.$store.commit("LoadingState/setContentLoading", "");
+      }, 2000);
+    },
+    delBook() {
+      this.$store.commit("LoadingState/setContentLoading", "Deleting a book");
+      this.$store.commit("LoadingState/setLoading", true);
+      this.editFields = true;
+      setTimeout(() => {
+        this.$store.commit("LoadingState/setLoading", false);
+        this.$store.commit("LoadingState/setContentLoading", "");
+      }, 2000);
     }
   },
   computed: {
@@ -127,14 +247,28 @@ export default {
       return new Date().getFullYear();
     },
     getValidForm() {
-      return this.btnAddBook.status;
+      return this.btn_add_book.status;
+    },
+    isEditField() {
+      return this.editFields;
     }
   },
   beforeMount() {
     const obKeys = Object.keys(this.dataBook);
     obKeys.forEach(field => {
       this.sendData[field] = "";
+      this.checkedBook[field] = "";
     });
+    this.sendData.maxRating = this.dataBook.rating.countStars;
+    // checked book
+    const chKeys = Object.keys(this.isBook);
+    if (chKeys.length > 0) {
+      this.editBook = true;
+      this.editFields = true;
+      chKeys.forEach(item => {
+        this.checkedBook[item] = this.isBook[item];
+      });
+    }
   }
 };
 </script>
@@ -152,7 +286,7 @@ export default {
   margin: 20px auto;
 }
 
-.add_book {
+.edit_book {
   padding: 8px 15px;
   margin: 0 auto;
   background-color: var(--color_green_middle);
@@ -167,6 +301,38 @@ export default {
     background-color: transparent;
     color: var(--color_green_middle);
   }
+}
+
+.edit,
+.save,
+.del {
+  padding: 8px 15px;
+  margin: 0 auto;
+  border: none;
+  font-family: var(--Roboto);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.3s linear;
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.edit {
+  background-color: var(--color_blue_light);
+  margin-right: 10px;
+}
+
+.save {
+  background-color: var(--color_green_middle);
+  margin-right: 10px;
+}
+
+.del {
+  background-color: var(--color_red);
+  margin-left: 10px;
 }
 
 .disabled {

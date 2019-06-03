@@ -15,6 +15,7 @@
       :class="isValidField || value === '' ? '' : 'error_color error_border'"
       @input="input"
       :required="required"
+      :readonly="readonly ? true : false"
     )
     .show_count(v-if="maxNumb")
       span.min_numb(
@@ -31,6 +32,11 @@ export default {
     bind: {
       type: String,
       required: true
+    },
+    outsideValue: {
+      type: [Number, String],
+      required: false,
+      default: ""
     },
     label: {
       type: String,
@@ -58,6 +64,11 @@ export default {
       default: ""
     },
     required: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    readonly: {
       type: Boolean,
       required: false,
       default: false
@@ -95,6 +106,12 @@ export default {
         value: parseInt(this.value, 10),
         valid: this.validMinNumb && this.validMaxNumb
       });
+    },
+    setValue() {
+      if (!this.outsideValue) {
+        return;
+      }
+      this.value = this.outsideValue;
     }
   },
   computed: {
@@ -141,6 +158,16 @@ export default {
       }
       return this.validMinNumb && this.validMaxNumb;
     }
+  },
+  beforeMount() {
+    this.setValue();
+    if (this.value) {
+      this.input({
+        target: {
+          name: this.bind
+        }
+      });
+    }
   }
 };
 </script>
@@ -172,6 +199,9 @@ export default {
   }
   &[type="number"] {
     appearance: textfield;
+  }
+  &:read-only {
+    background-color: var(--color_grey_light);
   }
 }
 
