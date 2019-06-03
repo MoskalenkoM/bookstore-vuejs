@@ -1,23 +1,25 @@
 <template lang="pug">
-  ._wrap_textarea
+  ._wrap_input
     label.label(
       :for="bind"
-      :class="validMaxLength ? '' : 'error_color'"
+      :class="invalidMin || invalidMax ? 'error_color' : ''"
     ) {{ label }}
-    textarea.textarea(
+    input.input(
       :id="bind"
       :name="bind"
-      :maxlength="setMaxLength"
+      type="number"
+      :min="minYear"
+      :max="maxYear"
       v-model="value"
       :placeholder="label"
-      :class="validMaxLength ? '' : 'error_color error_border'"
+      :class="invalidMin || invalidMax ? 'error_color error_border' : ''"
       @input="input"
       :required="required"
     )
-    .show_count(v-if="maxLength")
-      span.min_length(v-if="separator" :class="validMaxLength ? '' : 'error_color'") {{ currentLength }}
-      span.separator(v-if="separator") {{ separator }}
-      span.max_length {{ maxLength }}
+    .show_years(v-if="minYear || maxYear")
+      span.min_year(v-if="minYear" :class="invalidMin ? 'error_color' : ''") {{ minYear }}
+      span.separator(v-if="minYear || maxYear") {{ separator }}
+      span.max_year(v-if="maxYear" :class="invalidMax ? 'error_color' : ''") {{ maxYear }}
 </template>
 
 <script>
@@ -32,15 +34,18 @@ export default {
       required: false,
       default: ""
     },
+    minYear: {
+      type: [String, Number],
+      required: true
+    },
+    maxYear: {
+      type: [String, Number],
+      required: true
+    },
     separator: {
       type: String,
       required: false,
       default: "/"
-    },
-    maxLength: {
-      type: [Number, String],
-      required: false,
-      default: ""
     },
     required: {
       type: Boolean,
@@ -55,67 +60,65 @@ export default {
   },
   methods: {
     input(e) {
-      this.simpleSecurity();
-      if (this.validMaxLength) {
-        this.sendData(e);
+      if (e.data === "e" || e.data === "E" || e.data === "-") {
+        e.target.value = this.value;
+        return;
+      }
+      if (!this.invalidMin && !this.invalidMax && this.validLength) {
+        this.setData(e, this.value);
       } else {
-        this.sendData(e);
+        this.setData(e, "");
       }
     },
-    simpleSecurity() {
-      const pt = /[<>]{1,}/gi;
-      this.value = this.value.replace(pt, "%");
-    },
-    sendData(e) {
+    setData(e, val) {
       this.$emit("input", {
         name: e.target.name,
-        value: this.value,
-        valid: this.validMaxLength
+        value: val,
+        valid: !this.invalidMin && !this.invalidMax && this.validLength
       });
     }
   },
   computed: {
-    currentLength() {
-      const len = this.value === "" ? 0 : this.value.length;
-      return len;
+    invalidMin() {
+      return +this.value < +this.minYear && this.value !== "";
     },
-    setMaxLength() {
-      if (!this.maxLength) {
-        return false;
-      }
-      return +this.maxLength + 1;
+    invalidMax() {
+      return +this.value > +this.maxYear && this.value !== "";
     },
-    validMaxLength() {
-      if (!this.maxLength) {
-        return true;
-      }
-      return +this.value.length <= +this.maxLength;
+    validLength() {
+      return +this.value.length === 4;
     }
   }
 };
 </script>
 
 <style lang="postcss" scoped>
-._wrap_textarea {
+._wrap_input {
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-.textarea {
-  height: 200px;
+.input {
+  text-indent: 20px;
+  line-height: 30px;
   width: 100%;
-  font-size: 16px;
-  padding: 10px 10px 5px 20px;
   border-radius: 5px;
   border: 1px solid var(--color_grey_middle);
   color: var(--color_grey_dark);
   background-color: white;
+  font-size: 16px;
   font-family: var(--Roboto);
-  resize: none;
   outline: none;
   &::placeholder {
     color: var(--color_grey_middle);
+  }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  &[type="number"] {
+    appearance: textfield;
   }
 }
 
@@ -127,7 +130,7 @@ export default {
   color: var(--color_grey_dark);
 }
 
-.show_count {
+.show_years {
   display: flex;
   position: absolute;
   color: var(--color_grey_middle);

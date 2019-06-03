@@ -7,21 +7,22 @@
     input.input(
       :id="bind"
       :name="bind"
-      :maxlength="setMaxLength"
-      :type="type"
+      type="number"
+      :min="minNumb ? minNumb : false"
+      :max="maxNumb ? setMaxNumb : false"
       v-model="value"
       :placeholder="label"
-      :class="isValidField  || value === '' ? '' : 'error_color error_border'"
+      :class="isValidField || value === '' ? '' : 'error_color error_border'"
       @input="input"
       :required="required"
     )
-    .show_count(v-if="maxLength")
-      span.min_length(
-        v-if="isSeparator && maxLength"
-        :class="validMaxLength  || value === '' ? '' : 'error_color'"
-      ) {{ currentLength }}
-      span.separator(v-if="isSeparator && maxLength") {{ separator }}
-      span.max_length(v-if="maxLength") {{ maxLength }}
+    .show_count(v-if="maxNumb")
+      span.min_numb(
+        v-if="minNumb && isSeparator"
+        :class="validMinNumb || value === '' ? '' : 'error_color'"
+      ) {{ currentValue }}
+      span.separator(v-if="minNumb && isSeparator") {{ separator }}
+      span.max_numb(:class="validMaxNumb ? '' : 'error_color'") {{ maxNumb }}
 </template>
 
 <script>
@@ -31,17 +32,17 @@ export default {
       type: String,
       required: true
     },
-    type: {
-      type: String,
-      required: false,
-      default: "text"
-    },
     label: {
       type: String,
       required: false,
       default: ""
     },
-    maxLength: {
+    minNumb: {
+      type: [Number, String],
+      required: false,
+      default: ""
+    },
+    maxNumb: {
       type: [Number, String],
       required: false,
       default: ""
@@ -70,44 +71,57 @@ export default {
   },
   methods: {
     input(e) {
-      this.simpleSecurity();
+      this.firstZeroValid();
+      this.simpleValid();
       if (this.pattern) {
         this.validPattern = this.setPattern.test(this.value);
-        return this.sendData(e);
+        if (this.isValidField) {
+          return this.sendData(e);
+        }
+        return false;
       }
       return this.sendData(e);
     },
-    simpleSecurity() {
-      const pt = /[<>]{1,}/gi;
-      this.value = this.value.replace(pt, "%");
+    simpleValid() {
+      const pt = /[-e]{1,}/gi;
+      this.value = +String(this.value).replace(pt, "");
+    },
+    firstZeroValid() {
+      this.value = parseInt(this.value, 10);
     },
     sendData(e) {
       this.$emit("input", {
         name: e.target.name,
-        value: this.value,
-        valid: this.isValidField
+        value: parseInt(this.value, 10),
+        valid: this.validMinNumb && this.validMaxNumb
       });
     }
   },
   computed: {
-    validMaxLength() {
-      if (!this.maxLength) {
+    validMinNumb() {
+      if (!this.minNumb) {
         return true;
       }
-      return +this.value.length <= +this.maxLength;
+      return +this.value >= +this.minNumb;
     },
-    currentLength() {
-      const len = this.value === "" ? 0 : this.value.length;
-      return len;
+    validMaxNumb() {
+      if (!this.maxNumb) {
+        return true;
+      }
+      return +this.value <= +this.maxNumb;
     },
-    setMaxLength() {
-      if (!this.maxLength) {
+    setMaxNumb() {
+      if (!this.maxNumb) {
         return false;
       }
-      return +this.maxLength + 1;
+      return +this.maxNumb + 1;
+    },
+    currentValue() {
+      const val = !this.value ? 0 : this.value;
+      return val;
     },
     isSeparator() {
-      return this.minLength || this.maxLength;
+      return this.minNumb && this.maxNumb;
     },
     setPattern() {
       if (this.pattern) {
@@ -115,11 +129,17 @@ export default {
       }
       return false;
     },
+    isValidPattern() {
+      if (!this.pattern) {
+        return true;
+      }
+      return this.validPattern;
+    },
     isValidField() {
       if (this.pattern) {
-        return this.validPattern && this.validMaxLength;
+        return this.isValidPattern && this.validMinNumb && this.validMaxNumb;
       }
-      return this.validMaxLength;
+      return this.validMinNumb && this.validMaxNumb;
     }
   }
 };
@@ -145,6 +165,13 @@ export default {
   outline: none;
   &::placeholder {
     color: var(--color_grey_middle);
+  }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  &[type="number"] {
+    appearance: textfield;
   }
 }
 

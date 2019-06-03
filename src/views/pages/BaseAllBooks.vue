@@ -1,5 +1,5 @@
 <template lang="pug">
-  p(@click="EditBook") All books
+  .all_books(@click="EditBook") All books
 </template>
 
 <script>
@@ -13,4 +13,7 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
+.all_books {
+  margin: auto;
+}
 </style>

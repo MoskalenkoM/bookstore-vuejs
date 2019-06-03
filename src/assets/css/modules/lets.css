@@ -1,14 +1,15 @@
 :root {
   /* colors */
-  --color_rating: rgba(249, 209, 51, 1);
+  --color_rating: rgba(255, 187, 0, 1);
   --color_green: rgba(6, 122, 26, 1);
+  --color_green_middle: rgba(6, 122, 26, 0.8);
   --color_blue: rgba(6, 57, 113, 1);
   /* --color_blue_dark: rgba(42, 82, 190, 1); */
   --color_red: rgba(204, 6, 5, 1);
   --color_grey: rgba(157, 161, 170, 1);
-  --color_grey_dark: rgba(100, 107, 99, 1);
   --color_grey_light: rgba(199, 208, 204, 1);
   --color_grey_middle: rgba(181, 184, 177, 1);
+  --color_grey_dark: rgba(100, 107, 99, 1);
 
   /* sizes */
   --min_width: 320px;

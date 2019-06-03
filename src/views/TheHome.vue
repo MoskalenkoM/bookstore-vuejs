@@ -20,8 +20,7 @@ export default {
 
 <style lang="postcss" scoped>
 .main_view {
-  min-height: var(--height_100);
-  height: var(--height_100);
+  min-height: 100%;
   width: var(--width_100);
   display: flex;
   flex-direction: column;
@@ -32,7 +31,6 @@ export default {
   max-width: var(--max_width);
   width: var(--width_100);
   margin: 0 auto auto;
-  border-bottom: 1px solid var(--color_grey_middle);
 }
 
 .main {
@@ -40,19 +38,18 @@ export default {
   height: 100%;
   max-width: var(--max_width);
   width: var(--width_100);
-  margin: 0 auto;
+  margin: auto;
 }
 
 .footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50px;
+  line-height: 50px;
   max-width: var(--max_width);
   width: var(--width_100);
   font-family: var(--RobotoBold);
-  margin: auto auto 0;
-  border-top: 1px solid var(--color_grey_middle);
-  color: var(--color_blue);
+  margin: 25px auto 0;
+  color: var(--color_green_middle);
 }
 </style>
