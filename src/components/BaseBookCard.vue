@@ -48,7 +48,10 @@ export default {
   width: 100%;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  @media screen and (width <= 400px) {
+    height: 300px;
+  }
 }
 
 .content {
@@ -59,6 +62,9 @@ export default {
   font-family: var(--Roboto);
   color: var(--color_blue_light);
   font-size: 16px;
+  @media screen and (width <= 400px) {
+    padding: 15px 10px;
+  }
 }
 
 .title,
@@ -75,6 +81,11 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media screen and (width <= 400px) {
+    height: 18px;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
 }
 
 .descr {
@@ -85,6 +96,11 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media screen and (width <= 400px) {
+    height: 20px;
+    line-height: 1.2;
+    margin-top: 5px;
+  }
 }
 
 .base_rating {
@@ -92,6 +108,9 @@ export default {
   background-color: var(--color_grey_light_more);
   font-family: var(--Roboto);
   color: var(--color_blue_light);
-  padding: 10px 15px;
+  padding: 15px;
+  @media screen and (width <= 400px) {
+    padding: 10px;
+  }
 }
 </style>

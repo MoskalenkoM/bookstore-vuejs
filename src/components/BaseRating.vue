@@ -30,10 +30,18 @@ export default {
   flex-direction: column;
 }
 
+.title {
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
 .wrap_stars {
   display: flex;
   align-items: center;
   margin-top: 5px;
+  @media screen and (width <= 400px) {
+    margin-top: 2px;
+  }
 }
 
 .star {
@@ -44,7 +52,7 @@ export default {
   background-image: url(../assets/img/star.png);
   height: 15px;
   width: 15px;
-  margin: 0 2px;
+  margin: 0 5px 0 0;
 }
 
 .rating {

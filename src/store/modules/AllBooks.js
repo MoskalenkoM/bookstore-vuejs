@@ -4,10 +4,8 @@ export default {
     allBooks: [
       {
         book_author: 'Лев Толстой',
-        book_cover:
-          'https://5book.ru/uploads/posts/2019-02/1550749662_voina.jpg',
-        book_description:
-          'Война и мир - самый известный роман Льва Николаевича Толстого.',
+        book_cover: 'https://5book.ru/uploads/posts/2019-02/1550749662_voina.jpg',
+        book_description: 'Война и мир - самый известный роман Льва Николаевича Толстого.',
         book_title: 'ВОЙНА И МИР 1',
         code_isbn: '978-5-699-11426-9',
         comments:
@@ -21,9 +19,9 @@ export default {
       },
       {
         book_author: 'Лев Толстой',
-        book_cover: '',
-        book_description:
-          'Война и мир - самый известный роман Льва Николаевича Толстого.',
+        book_cover:
+          'https://kbimages1-a.akamaihd.net/233b7ade-3e89-4dac-a7ae-493af372b051/1200/1200/False/Dnh5bzEzfTy2g8YEePD3lA.jpg',
+        book_description: 'Война и мир - самый известный роман Льва Николаевича Толстого.',
         book_title: 'ВОЙНА И МИР 2',
         code_isbn: '978-4-699-11434-9',
         comments:
@@ -37,9 +35,8 @@ export default {
       },
       {
         book_author: 'Лев Толстой',
-        book_cover: '',
-        book_description:
-          'Война и мир - самый известный роман Льва Николаевича Толстого.',
+        book_cover: 'http://xn--90aaubameri.xn--p1ai/data/images/3300010/33000100068.jpg',
+        book_description: 'Война и мир - самый известный роман Льва Николаевича Толстого.',
         book_title: 'ВОЙНА И МИР 3',
         code_isbn: '978-3-699-10034-9',
         comments:
@@ -53,9 +50,8 @@ export default {
       },
       {
         book_author: 'Лев Толстой',
-        book_cover: '',
-        book_description:
-          'Война и мир - самый известный роман Льва Николаевича Толстого.',
+        book_cover: 'https://www.bookvoed.ru/files/1836/31/76/75.jpg',
+        book_description: 'Война и мир - самый известный роман Льва Николаевича Толстого.',
         book_title: 'ВОЙНА И МИР 4',
         code_isbn: '943-7-699-10034-9',
         comments:

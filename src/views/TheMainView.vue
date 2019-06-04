@@ -58,11 +58,17 @@ export default {
   opacity: 0.85;
   display: flex;
   justify-content: center;
-  padding: 50px 0 0;
+  padding: 50px;
   font-family: var(--RobotoBold);
   font-size: 30px;
   color: var(--color_blue);
   z-index: 100;
+  text-align: center;
+  @media screen and (width <= 400px) {
+    flex-direction: column;
+    align-items: center;
+    font-size: 16px;
+  }
 }
 
 .header {

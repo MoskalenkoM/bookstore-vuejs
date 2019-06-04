@@ -40,5 +40,9 @@ export default {
   &:hover {
     box-shadow: 1px 1px 10px 0 var(--color_green_middle);
   }
+  @media screen and (width <= 400px) {
+    margin: 10px;
+    width: 300px;
+  }
 }
 </style>

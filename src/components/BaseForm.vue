@@ -15,10 +15,12 @@
         )
         base-button.save(
           v-if="!isEditField"
+          :class="getValidForm ? '' : 'disabled'"
           :content="btn_save_book.content"
           @click="saveBook()"
         )
         base-button.del(
+          :class="getValidForm ? '' : 'disabled'"
           :content="btn_del_book.content"
           @click="delBook()"
         )
@@ -197,16 +199,20 @@ export default {
   },
   methods: {
     addBook() {
-      // FIXME:
-      console.log(!!this.sendData);
-      this.$store.commit("LoadingState/setContentLoading", "Adding a book");
+      this.$store.commit("LoadingState/setContentLoading", "Request API");
       this.$store.commit("LoadingState/setLoading", true);
       this.editFields = true;
       setTimeout(() => {
-        this.$store.commit("LoadingState/setLoading", false);
-        this.$store.commit("LoadingState/setContentLoading", "");
-        this.$router.push("all-books");
-      }, 2000);
+        this.$store.commit(
+          "LoadingState/setContentLoading",
+          "API response processing and refreshing data"
+        );
+        setTimeout(() => {
+          this.$store.commit("LoadingState/setLoading", false);
+          this.$store.commit("LoadingState/setContentLoading", "");
+          this.$router.push("all-books");
+        }, 1500);
+      }, 1500);
     },
     setFieldBook(data) {
       if (data.value && data.valid) {
@@ -230,6 +236,7 @@ export default {
       setTimeout(() => {
         this.$store.commit("LoadingState/setLoading", false);
         this.$store.commit("LoadingState/setContentLoading", "");
+        this.$router.push("all-books");
       }, 2000);
     },
     delBook() {
@@ -239,6 +246,7 @@ export default {
       setTimeout(() => {
         this.$store.commit("LoadingState/setLoading", false);
         this.$store.commit("LoadingState/setContentLoading", "");
+        this.$router.push("all-books");
       }, 2000);
     }
   },
@@ -277,13 +285,19 @@ export default {
 ._form {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 500px;
   margin: 0 auto;
+  @media screen and (width <= 550px) {
+    width: 90%;
+  }
 }
 
 .wrap_btns {
   display: flex;
   margin: 20px auto;
+  @media screen and (width <= 400px) {
+    flex-direction: column;
+  }
 }
 
 .edit_book {
@@ -323,16 +337,25 @@ export default {
 .edit {
   background-color: var(--color_blue_light);
   margin-right: 10px;
+  @media screen and (width <= 400px) {
+    margin: 5px auto;
+  }
 }
 
 .save {
   background-color: var(--color_green_middle);
   margin-right: 10px;
+  @media screen and (width <= 400px) {
+    margin: 5px auto;
+  }
 }
 
 .del {
   background-color: var(--color_red);
   margin-left: 10px;
+  @media screen and (width <= 400px) {
+    margin: 5px auto;
+  }
 }
 
 .disabled {
