@@ -232,7 +232,7 @@ export default {
     saveBook() {
       this.$store.commit("LoadingState/setContentLoading", "Saving a book");
       this.$store.commit("LoadingState/setLoading", true);
-      this.editFields = true;
+      // this.editFields = true;
       setTimeout(() => {
         this.$store.commit("LoadingState/setLoading", false);
         this.$store.commit("LoadingState/setContentLoading", "");
@@ -242,7 +242,7 @@ export default {
     delBook() {
       this.$store.commit("LoadingState/setContentLoading", "Deleting a book");
       this.$store.commit("LoadingState/setLoading", true);
-      this.editFields = true;
+      // this.editFields = true;
       setTimeout(() => {
         this.$store.commit("LoadingState/setLoading", false);
         this.$store.commit("LoadingState/setContentLoading", "");
@@ -315,6 +315,12 @@ export default {
     background-color: transparent;
     color: var(--color_green_middle);
   }
+  @media screen and (width <= 400px) {
+    &:hover {
+      background-color: var(--color_green_middle);
+      color: white;
+    }
+  }
 }
 
 .edit,
@@ -331,6 +337,11 @@ export default {
   transition: opacity 0.3s linear;
   &:hover {
     opacity: 0.5;
+  }
+  @media screen and (width <= 400px) {
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
