@@ -232,7 +232,6 @@ export default {
     saveBook() {
       this.$store.commit("LoadingState/setContentLoading", "Saving a book");
       this.$store.commit("LoadingState/setLoading", true);
-      // this.editFields = true;
       setTimeout(() => {
         this.$store.commit("LoadingState/setLoading", false);
         this.$store.commit("LoadingState/setContentLoading", "");
@@ -242,7 +241,6 @@ export default {
     delBook() {
       this.$store.commit("LoadingState/setContentLoading", "Deleting a book");
       this.$store.commit("LoadingState/setLoading", true);
-      // this.editFields = true;
       setTimeout(() => {
         this.$store.commit("LoadingState/setLoading", false);
         this.$store.commit("LoadingState/setContentLoading", "");
