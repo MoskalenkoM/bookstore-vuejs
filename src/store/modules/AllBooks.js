@@ -1,3 +1,5 @@
+import router from '../../routes';
+
 export default {
   namespaced: true,
   state: {
@@ -63,19 +65,99 @@ export default {
         rating_max: '5',
         rating: '2'
       }
-    ]
+    ],
+    matchBook: false,
+    countMatchBook: null
   },
   getters: {
     allBooks: state => state.allBooks
   },
   mutations: {
-    addBook: (state, book) => {
-      state.allBooks.push(book);
+    changeCheckFlag(state, flag) {
+      state.matchBook = flag;
+    },
+    changeCountMatch(state, data) {
+      state.countMatchBook = data;
+    },
+    checkingBookMatch(state, book) {
+      state.allBooks.forEach((item, index) => {
+        if (book.code_isbn === item.code_isbn && book.publishing === item.publishing) {
+          state.matchBook = true;
+          state.countMatchBook = index;
+        }
+      });
+    },
+    addBook: (state, newBook) => {
+      state.allBooks.push(newBook);
+    },
+    delBook: (state, countBook) => {
+      state.allBooks.splice(countBook, 1);
+    },
+    changeBook(state, dataBook) {
+      const pos = dataBook.posBook;
+      const { newBook } = dataBook;
+      state.allBooks.splice(pos, 1, newBook);
     }
   },
   actions: {
-    urlAddBook: (store, book) => {
-      store.commit('addBook', book);
+    urlAddBook: (store, newBook) => {
+      store.commit('checkingBookMatch', newBook);
+
+      if (store.state.matchBook) {
+        alert('This book isbn and a publishing already exists!');
+      } else {
+        store.commit('addBook', newBook);
+        alert('This book was added!');
+      }
+
+      store.commit('LoadingState/disablePreloader', '', { root: true });
+
+      if (!store.state.matchBook) {
+        router.push('all-books');
+      }
+      // reset the match flag
+      store.commit('changeCheckFlag', false);
+    },
+    urlDellBook(store, delBook) {
+      store.commit('checkingBookMatch', delBook);
+
+      if (!store.state.matchBook) {
+        alert("You don't have such a book!");
+      } else {
+        store.commit('delBook', store.state.countMatchBook);
+        // alert message
+        alert(`'This book ${delBook.book_title} was deleted!'`);
+      }
+
+      store.commit('LoadingState/disablePreloader', '', { root: true });
+
+      if (store.state.matchBook) {
+        router.push('all-books');
+      }
+
+      // reset the match flag
+      store.commit('changeCheckFlag', false);
+      store.commit('changeCountMatch', null);
+    },
+    urlSaveBook(store, books) {
+      const { oldBook } = books;
+      const { newBook } = books;
+
+      store.commit('checkingBookMatch', oldBook);
+      // changing
+      store.commit('changeBook', {
+        newBook,
+        posBook: store.state.countMatchBook
+      });
+      // alert message
+      alert(`'This book ${oldBook.book_title} was changed!'`);
+
+      store.commit('LoadingState/disablePreloader', '', { root: true });
+      router.push('all-books');
+
+      // reset the match flag
+      store.commit('changeCheckFlag', false);
+      store.commit('changeCountMatch', null);
     }
   }
 };

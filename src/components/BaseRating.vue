@@ -13,11 +13,11 @@
 export default {
   props: {
     maxRating: {
-      type: String,
+      type: [String, Number],
       required: true
     },
     rating: {
-      type: String,
+      type: [Number, String],
       required: true
     }
   }

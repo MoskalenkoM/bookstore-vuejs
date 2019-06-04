@@ -23,11 +23,6 @@ export default {};
     padding: 5px 10px;
     margin: 0 5px;
     border-radius: 5px;
-    transition: color 0.2s linear, background-color 0.3s linear;
-    &:hover {
-      background-color: var(--color_green_middle);
-      color: white;
-    }
   }
 }
 

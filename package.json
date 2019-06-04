@@ -87,7 +87,8 @@
     "rules": {
       "global-require": "off",
       "no-param-reassign": "off",
-      "no-console": "off"
+      "no-console": "off",
+      "no-alert": "off"
     }
   },
   "browserslist": [

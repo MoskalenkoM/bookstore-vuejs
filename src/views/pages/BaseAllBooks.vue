@@ -30,6 +30,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .base_book_card {

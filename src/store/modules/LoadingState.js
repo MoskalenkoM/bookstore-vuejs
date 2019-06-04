@@ -14,6 +14,10 @@ export default {
     },
     setContentLoading(state, content) {
       state.contentLoading = content;
+    },
+    disablePreloader(state) {
+      state.loading = false;
+      state.contentLoading = '';
     }
   }
 };

@@ -198,20 +198,32 @@ export default {
     };
   },
   methods: {
-    addBook() {
-      this.$store.commit("LoadingState/setContentLoading", "Request API");
+    checkingBook() {
+      this.$store.commit(
+        "LoadingState/setContentLoading",
+        "Checking this book"
+      );
       this.$store.commit("LoadingState/setLoading", true);
-      this.editFields = true;
+    },
+    addBook() {
+      this.checkingBook();
       setTimeout(() => {
-        this.$store.commit(
-          "LoadingState/setContentLoading",
-          "API response processing and refreshing data"
-        );
-        setTimeout(() => {
-          this.$store.commit("LoadingState/setLoading", false);
-          this.$store.commit("LoadingState/setContentLoading", "");
-          this.$router.push("all-books");
-        }, 1500);
+        this.$store.dispatch("AllBooks/urlAddBook", this.sendData);
+      }, 1500);
+    },
+    delBook() {
+      this.checkingBook();
+      setTimeout(() => {
+        this.$store.dispatch("AllBooks/urlDellBook", this.sendData);
+      }, 1500);
+    },
+    saveBook() {
+      this.checkingBook();
+      setTimeout(() => {
+        this.$store.dispatch("AllBooks/urlSaveBook", {
+          oldBook: this.checkedBook,
+          newBook: this.sendData
+        });
       }, 1500);
     },
     setFieldBook(data) {
@@ -228,24 +240,6 @@ export default {
     },
     setEditBook() {
       this.editFields = false;
-    },
-    saveBook() {
-      this.$store.commit("LoadingState/setContentLoading", "Saving a book");
-      this.$store.commit("LoadingState/setLoading", true);
-      setTimeout(() => {
-        this.$store.commit("LoadingState/setLoading", false);
-        this.$store.commit("LoadingState/setContentLoading", "");
-        this.$router.push("all-books");
-      }, 2000);
-    },
-    delBook() {
-      this.$store.commit("LoadingState/setContentLoading", "Deleting a book");
-      this.$store.commit("LoadingState/setLoading", true);
-      setTimeout(() => {
-        this.$store.commit("LoadingState/setLoading", false);
-        this.$store.commit("LoadingState/setContentLoading", "");
-        this.$router.push("all-books");
-      }, 2000);
     }
   },
   computed: {
@@ -265,7 +259,7 @@ export default {
       this.sendData[field] = "";
       this.checkedBook[field] = "";
     });
-    this.sendData.maxRating = this.dataBook.rating.countStars;
+    this.sendData.rating_max = this.dataBook.rating.countStars;
     // checked book
     const chKeys = Object.keys(this.isBook);
     if (chKeys.length > 0) {
