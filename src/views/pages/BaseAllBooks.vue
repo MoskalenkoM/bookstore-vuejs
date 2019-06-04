@@ -1,10 +1,12 @@
 <template lang="pug">
   .all_books
-    base-book-card.base_book_card(
-      v-for="(book, index) in allBooks"
-      :key="index"
-      :book="book"
-    )
+    .wrap_books(v-if="allBooks.length > 0")
+      base-book-card.base_book_card(
+        v-for="(book, index) in allBooks"
+        :key="index"
+        :book="book"
+      )
+    .no_books(v-if="allBooks.length === 0") You haven't books
 </template>
 
 <script>
@@ -28,9 +30,24 @@ export default {
 <style lang="postcss" scoped>
 .all_books {
   display: flex;
+  margin: 0 auto;
+}
+
+.wrap_books {
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 auto;
+}
+
+.no_books {
+  margin: 50% auto;
+  color: var(--color_red);
+  font-family: var(--Roboto);
+  font-size: 20px;
+  @media screen and (width <= 400px) {
+    font-size: 16px;
+  }
 }
 
 .base_book_card {

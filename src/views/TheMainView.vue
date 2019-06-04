@@ -75,7 +75,7 @@ export default {
   display: flex;
   max-width: var(--max_width);
   width: var(--width_100);
-  margin: 0 auto auto;
+  margin: 0 auto;
 }
 
 .main {
@@ -83,7 +83,7 @@ export default {
   height: 100%;
   max-width: var(--max_width);
   width: var(--width_100);
-  margin: auto;
+  margin: 0 auto auto;
 }
 
 .footer {
